@@ -21,7 +21,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 const getAllUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await UserServices.getAllUser();
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       data: result,
       message: "User retrieve successfully",
@@ -37,9 +37,9 @@ const getAllUser = async (req: Request, res: Response, next: NextFunction) => {
 };
 const getUserById = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const id = Number(req.params.id)
+    const id = Number(req.params.id);
     const result = await UserServices.getUserById(id);
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       data: result,
       message: "User retrieve successfully",
@@ -53,11 +53,21 @@ const getUserById = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 };
-const updateUserById = async (req: Request, res: Response, next: NextFunction) => {
+const updateUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const id = Number(req.params.id)
-    const result = await UserServices.updateUserById(id);
-    res.status(201).json({
+    const id = Number(req.params.id);
+    const result = await UserServices.updateUserById(id, {
+      name: req.body.name,
+      phone: req.body.phone,
+      picture: req.body.picture,
+      email: req.body.email,
+      password: req.body.password,
+    });
+    res.status(200).json({
       success: true,
       data: result,
       message: "User updated successfully",
@@ -71,11 +81,15 @@ const updateUserById = async (req: Request, res: Response, next: NextFunction) =
     });
   }
 };
-const deleteUserById = async (req: Request, res: Response, next: NextFunction) => {
+const deleteUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const id = Number(req.params.id)
+    const id = Number(req.params.id);
     const result = await UserServices.deleteUserById(id);
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       data: result,
       message: "User deleted successfully",
@@ -95,5 +109,5 @@ export const UserController = {
   getAllUser,
   getUserById,
   deleteUserById,
-  updateUserById
+  updateUserById,
 };
