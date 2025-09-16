@@ -32,9 +32,28 @@ const getPostById = async (id: number) => {
   });
   return result;
 };
+const updatePostById = async (id: number, payload:Partial<Prisma.PostUpdateInput>) => {
+  const result = await prisma.post.update({
+    where:{
+        id
+    },
+    data:payload
+  });
+  return result;
+};
+const deletePostById = async (id: number) => {
+  const result = await prisma.post.delete({
+    where:{
+        id
+    }
+  });
+  return result;
+};
 
 export const PostServices = {
   createPost,
   getAllPost,
-  getPostById
+  getPostById,
+  updatePostById,
+  deletePostById
 };
