@@ -53,6 +53,7 @@ const getUserById = async (id: number) => {
     })
     return result
 }
+
 const updateUserById = async (id: number, payload: Partial<Prisma.UserUpdateInput>) => {
     const result = await prisma.user.update({
         where:{
@@ -75,6 +76,7 @@ const updateUserById = async (id: number, payload: Partial<Prisma.UserUpdateInpu
     })
     return result
 }
+
 const deleteUserById = async (id: number) => {
     const result = await prisma.user.delete({
         where:{
