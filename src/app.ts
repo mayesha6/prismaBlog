@@ -1,11 +1,11 @@
 import compression from "compression";
 import cors from "cors";
 import express from "express";
+import { userRouter } from "./modules/user/user.routes";
 
 const app = express();
 
 // Middleware
-app.use(cors()); // Enables Cross-Origin Resource Sharing
 app.use(compression()); // Compresses response bodies for faster delivery
 app.use(express.json()); // Parse incoming JSON requests
 
@@ -15,6 +15,12 @@ app.use(
     credentials: true,
   })
 );
+app.use((req, _res, next) => {
+  console.log(`[${req.method}] ${req.url}`);
+  next();
+});
+// Routes
+app.use("/api/v1/user", userRouter)
 
 // Default route for testing
 app.get("/", (_req, res) => {
