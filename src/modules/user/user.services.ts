@@ -53,9 +53,17 @@ const getUserById = async (id: number) => {
     })
     return result
 }
+const updateUserById = async (id: number) => {
+    
+}
+const deleteUserById = async (id: number) => {
+    
+}
 
 export const UserServices = {
     createUser,
     getAllUser,
-    getUserById
+    getUserById,
+    updateUserById,
+    deleteUserById
 }

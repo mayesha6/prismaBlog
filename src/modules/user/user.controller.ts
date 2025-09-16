@@ -53,9 +53,47 @@ const getUserById = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 };
+const updateUserById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Number(req.params.id)
+    const result = await UserServices.updateUserById(id);
+    res.status(201).json({
+      success: true,
+      data: result,
+      message: "User updated successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update user",
+      error: err instanceof Error ? err.message : err,
+    });
+  }
+};
+const deleteUserById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Number(req.params.id)
+    const result = await UserServices.deleteUserById(id);
+    res.status(201).json({
+      success: true,
+      data: result,
+      message: "User deleted successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete user",
+      error: err instanceof Error ? err.message : err,
+    });
+  }
+};
 
 export const UserController = {
   createUser,
   getAllUser,
-  getUserById
+  getUserById,
+  deleteUserById,
+  updateUserById
 };
