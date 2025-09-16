@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { PostServices } from "./post.services";
 
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
+const createPost = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await PostServices.createPost(req.body);
     res.status(201).json({
@@ -18,9 +18,27 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 };
-const getAllUser = async (req: Request, res: Response, next: NextFunction) => {
+const getAllPost = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const result = await PostServices.getAllUser();
+    const result = await PostServices.getAllPost();
+    res.status(200).json({
+      success: true,
+      data: result,
+      message: "Post retrieve successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to retrieve post",
+      error: err instanceof Error ? err.message : err,
+    });
+  }
+};
+const getPostById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Number(req.params.id)
+    const result = await PostServices.getPostById(id);
     res.status(200).json({
       success: true,
       data: result,
@@ -37,6 +55,7 @@ const getAllUser = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const PostController = {
-    createUser,
-    getAllUser
+    createPost,
+    getAllPost,
+    getPostById
 }

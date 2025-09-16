@@ -3,8 +3,9 @@ import { PostController } from './post.controller';
 
 const router = express.Router();
 
-router.get("/", PostController.getAllUser)
-router.post("/", PostController.createUser)
+router.get("/", PostController.getAllPost)
+router.get("/:id", PostController.getPostById)
+router.post("/", PostController.createPost)
 
 export const postRouter = router
 

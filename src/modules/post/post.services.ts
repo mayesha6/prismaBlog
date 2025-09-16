@@ -20,12 +20,21 @@ const createPost = async (payload: Prisma.PostCreateInput): Promise<Post> => {
   });
   return createPost;
 };
-const getAllUser = async () => {
+const getAllPost = async () => {
   const result = await prisma.post.findMany();
+  return result;
+};
+const getPostById = async (id: number) => {
+  const result = await prisma.post.findUnique({
+    where:{
+        id
+    }
+  });
   return result;
 };
 
 export const PostServices = {
   createPost,
-  getAllUser
+  getAllPost,
+  getPostById
 };
