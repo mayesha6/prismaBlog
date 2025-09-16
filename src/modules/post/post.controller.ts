@@ -18,7 +18,25 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 };
+const getAllUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await PostServices.getAllUser();
+    res.status(200).json({
+      success: true,
+      data: result,
+      message: "Post retrieve successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to retrieve post",
+      error: err instanceof Error ? err.message : err,
+    });
+  }
+};
 
 export const PostController = {
-    createUser
+    createUser,
+    getAllUser
 }

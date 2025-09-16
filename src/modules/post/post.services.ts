@@ -13,20 +13,19 @@ const createPost = async (payload: Prisma.PostCreateInput): Promise<Post> => {
           name: true,
           email: true,
           phone: true,
-          picture: true,
-          role: true,
-          status: true,
-          isVerified: true,
-          createdAt: true,
-          updatedAt: true,
-          posts: true,
+          picture: true
         },
       },
     },
   });
   return createPost;
 };
+const getAllUser = async () => {
+  const result = await prisma.post.findMany();
+  return result;
+};
 
 export const PostServices = {
   createPost,
+  getAllUser
 };
