@@ -13,39 +13,47 @@ const createPost = async (payload: Prisma.PostCreateInput): Promise<Post> => {
           name: true,
           email: true,
           phone: true,
-          picture: true
+          picture: true,
         },
       },
     },
   });
   return createPost;
 };
-const getAllPost = async () => {
-  const result = await prisma.post.findMany();
+const getAllPost = async ({ page, limit }: { page: number; limit: number }) => {
+  console.log(page, limit);
+  const skip = (page - 1) * limit;
+  const result = await prisma.post.findMany({
+    skip,
+    take: limit,
+  });
   return result;
 };
 const getPostById = async (id: number) => {
   const result = await prisma.post.findUnique({
-    where:{
-        id
-    }
+    where: {
+      id,
+    },
   });
   return result;
 };
-const updatePostById = async (id: number, payload:Partial<Prisma.PostUpdateInput>) => {
+const updatePostById = async (
+  id: number,
+  payload: Partial<Prisma.PostUpdateInput>
+) => {
   const result = await prisma.post.update({
-    where:{
-        id
+    where: {
+      id,
     },
-    data:payload
+    data: payload,
   });
   return result;
 };
 const deletePostById = async (id: number) => {
   const result = await prisma.post.delete({
-    where:{
-        id
-    }
+    where: {
+      id,
+    },
   });
   return result;
 };
@@ -55,5 +63,5 @@ export const PostServices = {
   getAllPost,
   getPostById,
   updatePostById,
-  deletePostById
+  deletePostById,
 };
