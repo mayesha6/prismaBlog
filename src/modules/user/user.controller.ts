@@ -24,13 +24,31 @@ const getAllUser = async (req: Request, res: Response, next: NextFunction) => {
     res.status(201).json({
       success: true,
       data: result,
-      message: "User created successfully",
+      message: "User retrieve successfully",
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       success: false,
-      message: "Failed to create user",
+      message: "Failed to retrieve user",
+      error: err instanceof Error ? err.message : err,
+    });
+  }
+};
+const getUserById = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Number(req.params.id)
+    const result = await UserServices.getUserById(id);
+    res.status(201).json({
+      success: true,
+      data: result,
+      message: "User retrieve successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to retrieve user",
       error: err instanceof Error ? err.message : err,
     });
   }
@@ -39,4 +57,5 @@ const getAllUser = async (req: Request, res: Response, next: NextFunction) => {
 export const UserController = {
   createUser,
   getAllUser,
+  getUserById
 };
