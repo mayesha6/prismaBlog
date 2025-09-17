@@ -30,6 +30,19 @@ const getBlogStats = async () => {
       _min: {views:true},
       _max: {views:true}
     })
+    const feturedCount = await tx.post.count({
+      where:{
+        isFeatured : true
+      }
+    })
+    const topFetured = await tx.post.findFirst({
+      where:{
+        isFeatured : true
+      },
+      orderBy:{
+        views: "desc"
+      }     
+    })
 
     return {
       stats: {
@@ -38,6 +51,10 @@ const getBlogStats = async () => {
         averageView : aggregates._avg.views ?? 0,
         minimumView : aggregates._min.views ?? 0,
         maximumView : aggregates._max.views ?? 0,
+      },
+      featured:{        
+        count : feturedCount,
+        topFetured: topFetured
       }
     }
   })
