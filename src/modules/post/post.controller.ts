@@ -22,7 +22,13 @@ const getAllPost = async (req: Request, res: Response, next: NextFunction) => {
   try {
        const page = Number(req.query.page) || 1
     const limit =  Number(req.query.limit) || 10
-    const result = await PostServices.getAllPost({page, limit});
+    const search = req.query.search as string || ""
+    const isFeatured = req.query.isFeatured ? req.query.isFeatured === "true" : undefined
+    const tags = req.query.tags ? (req.query.tags as string).split(",") : []
+    const sortedBy = req.query.sortedBy as string || ""
+    const sortedOrder = req.query.sortedOrder as string || "" 
+
+    const result = await PostServices.getAllPost({page, limit, search, isFeatured, tags, sortedBy, sortedOrder});
     res.status(200).json({
       success: true,
       data: result,
