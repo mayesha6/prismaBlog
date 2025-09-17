@@ -26,7 +26,7 @@ const getAllPost = async ({
   search,
   isFeatured,
   tags,
-  sortedBy,
+  sortedBy = "",
   sortedOrder
 }: {
   page?: number;
@@ -66,7 +66,7 @@ const getAllPost = async ({
     take: limit,
     where,
     orderBy:{
-      sortedBy: sortedOrder
+      [sortedBy]: sortedOrder
     }
   });
   const total = await prisma.post.count({where})
