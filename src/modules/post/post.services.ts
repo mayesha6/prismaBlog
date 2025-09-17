@@ -27,7 +27,7 @@ const getAllPost = async ({
   isFeatured,
   tags,
   sortedBy = "",
-  sortedOrder
+  sortedOrder,
 }: {
   page?: number;
   limit?: number;
@@ -35,7 +35,7 @@ const getAllPost = async ({
   isFeatured?: boolean;
   tags?: string[];
   sortedBy?: string;
-  sortedOrder?:string
+  sortedOrder?: string;
 }) => {
   console.log(page, limit);
   const skip = (page - 1) * limit;
@@ -58,35 +58,63 @@ const getAllPost = async ({
         ],
       },
       typeof isFeatured === "boolean" && { isFeatured },
-      (tags && tags.length > 0) && { tags: { hasEvery: tags } },
+      tags && tags.length > 0 && { tags: { hasEvery: tags } },
     ].filter(Boolean),
   };
   const result = await prisma.post.findMany({
     skip,
     take: limit,
     where,
-    orderBy:{
-      [sortedBy]: sortedOrder
-    }
+    orderBy: {
+      [sortedBy]: sortedOrder,
+    },
   });
-  const total = await prisma.post.count({where})
+  const total = await prisma.post.count({ where });
   return {
     data: result,
     meta: {
       page,
       limit,
       total,
-      totalPage: Math.ceil(total/limit )
-    }
+      totalPage: Math.ceil(total / limit),
+    },
   };
 };
 const getPostById = async (id: number) => {
+  const findPost = await prisma.$transaction(async (tx) => {
+    const updateViews = await prisma.post.update({
+    where: {id},
+    data: {
+      views: {
+        increment : 1
+      }
+    }
+  }) 
   const result = await prisma.post.findUnique({
     where: {
       id,
     },
+    include: {
+      author: {
+        select:{
+            id:true,
+            name: true,
+            email: true,
+            phone: true,
+            picture: true,
+            role: true,
+            status: true,
+            isVerified: true,
+            createdAt: true,
+            updatedAt: true,
+            posts: true
+        },
+      }      
+    },
   });
-  return result;
+  return result
+  })
+  return findPost;
 };
 const updatePostById = async (
   id: number,
