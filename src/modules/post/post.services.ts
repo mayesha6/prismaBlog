@@ -20,6 +20,28 @@ const createPost = async (payload: Prisma.PostCreateInput): Promise<Post> => {
   });
   return createPost;
 };
+
+const getBlogStats = async () => {
+  return await prisma.$transaction(async (tx) => {
+    const aggregates = await tx.post.aggregate({
+      _count: true,
+      _sum: {views:true},
+      _avg: {views:true},
+      _min: {views:true},
+      _max: {views:true}
+    })
+
+    return {
+      stats: {
+        totalPosts : aggregates._count ?? 0,
+        totalViews : aggregates._sum.views ?? 0,
+        averageView : aggregates._avg.views ?? 0,
+        minimumView : aggregates._min.views ?? 0,
+        maximumView : aggregates._max.views ?? 0,
+      }
+    }
+  })
+};
 const getAllPost = async ({
   page = 1,
   limit = 10,
@@ -80,6 +102,7 @@ const getAllPost = async ({
     },
   };
 };
+
 const getPostById = async (id: number) => {
   const findPost = await prisma.$transaction(async (tx) => {
     const updateViews = await prisma.post.update({
@@ -143,4 +166,5 @@ export const PostServices = {
   getPostById,
   updatePostById,
   deletePostById,
+  getBlogStats
 };

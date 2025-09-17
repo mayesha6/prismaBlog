@@ -18,6 +18,23 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
 };
+const getBlogStats = async (req: Request, res: Response, next: NextFunction) => {
+  try { 
+    const result = await PostServices.getBlogStats();
+    res.status(200).json({
+      success: true,
+      data: result,
+      message: "Blog stats retrieve successfully",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to retrieve stats",
+      error: err instanceof Error ? err.message : err,
+    });
+  }
+};
 const getAllPost = async (req: Request, res: Response, next: NextFunction) => {
   try {
        const page = Number(req.query.page) || 1
@@ -116,5 +133,6 @@ export const PostController = {
   getAllPost,
   getPostById,
   updatePostById,
-  deletePostById
+  deletePostById,
+  getBlogStats
 };
