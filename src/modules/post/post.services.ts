@@ -44,6 +44,17 @@ const getBlogStats = async () => {
       }     
     })
 
+    const today = new Date()
+    const lastWeek = new Date()
+    lastWeek.setDate(today.getDate()-7)
+    const lastWeekPostCount = await tx.post.count({
+      where:{
+        createdAt : {
+          gte : lastWeek
+        }
+      }     
+    })
+
     return {
       stats: {
         totalPosts : aggregates._count ?? 0,
@@ -55,7 +66,8 @@ const getBlogStats = async () => {
       featured:{        
         count : feturedCount,
         topFetured: topFetured
-      }
+      },
+      lastWeekPostCount
     }
   })
 };
